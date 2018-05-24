@@ -2,17 +2,15 @@
   "name": "react-pubsub-store",
   "version": "1.0.0",
   "description": "Pubsub stores for react apps",
-  "main": "public/index.js",
+  "main": "src/index.js",
   "directories": {
     "example": "example"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "js": "NODE_ENV=production babel src/index.js --out-file public/index.js",
-    "example-js": "babel example/Fetcher.js --out-file example/_Fetcher.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Timo Janssen",
+  "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
