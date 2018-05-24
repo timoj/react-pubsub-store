@@ -1,35 +1,42 @@
 (function (global) {
     "use strict";
     var ReactPubSubStore = {};
-    ReactPubSubStore._fetcher = null;
+    ReactPubSubStore._dao = null;
     ReactPubSubStore._topics = {};
     ReactPubSubStore._topicsData = {};
     ReactPubSubStore._hOP = ReactPubSubStore._topics.hasOwnProperty;
 
 
     ReactPubSubStore._updateTopicData = function (topic) {
-        ReactPubSubStore._fetcher.fetchResource(topic, (response) => {
+        ReactPubSubStore._dao.fetchResource(topic, (response) => {
             ReactPubSubStore._topicsData[topic] = response;
-
             ReactPubSubStore._topics[topic].forEach(function (item) {
                 item(response !== undefined ? response : {});
             });
         });
     };
 
-    ReactPubSubStore.setFetcher = function (f) {
-        ReactPubSubStore._fetcher = f;
+    ReactPubSubStore.setDAO = function (dao) {
+        ReactPubSubStore._dao = dao;
     };
 
     ReactPubSubStore.subscribe = function (topic, listener) {
+        var justCreated = false;
+
         // Create the topic's object if not yet created
         if (!ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
             ReactPubSubStore._topics[topic] = [];
-            ReactPubSubStore._updateTopicData(topic);
+            justCreated = true;
         }
 
         // Add the listener to queue
         var index = ReactPubSubStore._topics[topic].push(listener) - 1;
+
+        if (justCreated) {
+            ReactPubSubStore._updateTopicData(topic);
+        } else {
+            listener(ReactPubSubStore._topicsData[topic]);
+        }
 
         // Provide handle back for removal of topic
         return {
@@ -37,6 +44,17 @@
                 delete ReactPubSubStore._topics[topic][index];
             }
         };
+    };
+
+    ReactPubSubStore.publish = function (topic, data) {
+        if (ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
+            ReactPubSubStore._dao.setResource(topic, data, function (response) {
+                ReactPubSubStore._topicsData[topic] = response;
+                ReactPubSubStore._topics[topic].forEach(function (item) {
+                    item(response !== undefined ? response : {});
+                });
+            });
+        }
     };
 
     if (typeof module === 'object' && module && typeof module.exports === 'object') {

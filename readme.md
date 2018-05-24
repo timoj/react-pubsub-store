@@ -8,7 +8,7 @@ This is a implementation of a pubsub pattern for React. You can subscribe on sto
 
 `npm install --save react-pubsub-store`
 
-You need to create a component that implements a function name `fetchResource`, which you will pass tot the pubsub store. For example:
+You need to create a component that implements a functions `fetchResource` and `setResource`, which you will pass to the pubsub store. For example:
 ```
 var Fetcher = (function () {
 
@@ -20,7 +20,14 @@ var Fetcher = (function () {
                 method: 'GET',
             }).then(response => response.json())
             .then(response => cb(response));
-        }
+        },
+        setResource: function (path, data, cb) {
+                    fetch(url, {
+                        method: 'POST',
+                        ...
+                    }).then(response => response.json())
+                    .then(response => cb(response));
+                }
     };
 })();
 
@@ -28,7 +35,7 @@ export default Fetcher;
 
 ....
 
-ReactPubSubStore.setFetcher(API);
+ReactPubSubStore.setFetcher(Fetcher);
 ```
 
 You can now start a new subscription:
@@ -36,4 +43,9 @@ You can now start a new subscription:
 this.subscription = ReactPubSubStore.subscribe('storeName', function (obj) {
   console.log("Just got data for the store 'storeName': ", obj);
 });
+```
+
+and you can publish new data:
+```
+ReactPubSubStore.publish('storeName', data);
 ```
