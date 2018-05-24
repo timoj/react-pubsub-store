@@ -2,7 +2,7 @@
   "name": "react-pubsub-store",
   "version": "1.0.0",
   "description": "Pubsub stores for react apps",
-  "main": "src/index.js",
+  "main": "public/index.js",
   "directories": {
     "example": "example"
   },
