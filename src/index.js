@@ -37,4 +37,4 @@ let ReactPubSubStore = (function (f) {
     };
 })();
 
-export default { ReactPubSubStore };
+export default ReactPubSubStore;

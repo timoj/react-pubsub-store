@@ -41,4 +41,4 @@ var ReactPubSubStore = function (f) {
     };
 }();
 
-exports.default = { ReactPubSubStore: ReactPubSubStore };
+exports.default = ReactPubSubStore;
