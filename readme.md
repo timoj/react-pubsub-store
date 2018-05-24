@@ -22,12 +22,12 @@ var Fetcher = (function () {
             .then(response => cb(response));
         },
         setResource: function (path, data, cb) {
-                    fetch(url, {
-                        method: 'POST',
-                        ...
-                    }).then(response => response.json())
-                    .then(response => cb(response));
-                }
+            fetch(url, {
+                method: 'POST',
+                ...
+            }).then(response => response.json())
+            .then(response => cb(response));
+        }
     };
 })();
 
