@@ -17,6 +17,10 @@
         });
     };
 
+    ReactPubSubStore.setFetcher = function (f) {
+        ReactPubSubStore._fetcher = f;
+    };
+
     ReactPubSubStore.subscribe = function (topic, listener) {
         // Create the topic's object if not yet created
         if (!ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
