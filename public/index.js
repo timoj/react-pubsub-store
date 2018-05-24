@@ -1,42 +1,40 @@
 (function (global) {
     "use strict";
-    let ReactPubSubStore = (function (f) {
-        let fetcher = f;
-        let topics = {};
-        let topicsData = {};
-        let hOP = topics.hasOwnProperty;
+    var ReactPubSubStore = {};
+    ReactPubSubStore._fetcher = null;
+    ReactPubSubStore._topics = {};
+    ReactPubSubStore._topicsData = {};
+    ReactPubSubStore._hOP = ReactPubSubStore._topics.hasOwnProperty;
 
 
-        let updateTopicData = (topic) => {
-            fetcher.fetchResource(topic, (response) => {
-                topicsData[topic] = response;
+    ReactPubSubStore._updateTopicData = function (topic) {
+        ReactPubSubStore._fetcher.fetchResource(topic, (response) => {
+            ReactPubSubStore._topicsData[topic] = response;
 
-                topics[topic].forEach(function (item) {
-                    item(response !== undefined ? response : {});
-                });
+            ReactPubSubStore._topics[topic].forEach(function (item) {
+                item(response !== undefined ? response : {});
             });
-        };
+        });
+    };
 
+    ReactPubSubStore.subscribe = function (topic, listener) {
+        // Create the topic's object if not yet created
+        if (!ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
+            ReactPubSubStore._topics[topic] = [];
+            ReactPubSubStore._updateTopicData(topic);
+        }
+
+        // Add the listener to queue
+        var index = ReactPubSubStore._topics[topic].push(listener) - 1;
+
+        // Provide handle back for removal of topic
         return {
-            subscribe: function (topic, listener) {
-                // Create the topic's object if not yet created
-                if (!hOP.call(topics, topic)) {
-                    topics[topic] = [];
-                    updateTopicData(topic);
-                }
-
-                // Add the listener to queue
-                let index = topics[topic].push(listener) - 1;
-
-                // Provide handle back for removal of topic
-                return {
-                    remove: function () {
-                        delete topics[topic][index];
-                    }
-                };
+            remove: function () {
+                delete ReactPubSubStore._topics[topic][index];
             }
         };
-    })();
+    };
+
     if (typeof module === 'object' && module && typeof module.exports === 'object') {
         module.exports = ReactPubSubStore;
 
