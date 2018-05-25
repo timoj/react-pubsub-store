@@ -1,4 +1,4 @@
-describe("Player", function () {
+describe("PubSub", function () {
     var Fetcher = (function () {
 
         var resources = {
