@@ -32,7 +32,6 @@ var Fetcher = (function () {
 })();
 
 export default Fetcher;
-
 ....
 
 ReactPubSubStore.setFetcher(Fetcher);
