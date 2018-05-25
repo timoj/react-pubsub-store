@@ -15,6 +15,13 @@
   "scripts": {
     "test": "jasmine"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timoj/react-pubsub-store.git"
+  },
+  "bugs": {
+    "url": "https://github.com/timoj/react-pubsub-store/issues"
+  },
   "author": "Timo Janssen",
   "license": "MIT",
   "devDependencies": {
