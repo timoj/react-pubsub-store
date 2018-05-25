@@ -4,6 +4,8 @@
 
 This is a implementation of a pubsub pattern for React. You can subscribe on store names that you create. When you subscribe to a store name that doesn't exist yet, it will be created as well as a initial data fetch for the specific store.
 
+[![Build Status](https://travis-ci.org/timoj/react-pubsub-store.svg?branch=master)](https://travis-ci.org/timoj/react-pubsub-store)
+
 ## Installation
 
 `npm install --save react-pubsub-store`
