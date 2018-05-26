@@ -50,3 +50,10 @@ and you can publish new data:
 ```
 ReactPubSubStore.publish('storeName', data);
 ```
+
+Don't forget to unsubscribe when the component unmounts:
+```$xslt
+componentWillUnmount() {
+    this.subscription.remove();
+}
+```
