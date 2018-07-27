@@ -55,11 +55,11 @@
                 ReactPubSubStore._topicsData[topic] = response;
                 ReactPubSubStore._topics[topic].forEach(function (item) {
                     item(response !== undefined ? response : {});
-                }, method);
+                });
                 if (cb !== undefined) {
                     cb(response !== undefined ? response : {});
                 }
-            });
+            }, method);
         }
     };
 
