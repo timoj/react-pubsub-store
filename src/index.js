@@ -46,7 +46,7 @@
         };
     };
 
-    ReactPubSubStore.publish = function (topic, data, method) {
+    ReactPubSubStore.publish = function (topic, data, method, cb) {
         if (method === undefined) {
             method = "POST";
         }
@@ -56,6 +56,9 @@
                 ReactPubSubStore._topics[topic].forEach(function (item) {
                     item(response !== undefined ? response : {});
                 }, method);
+                if (cb !== undefined) {
+                    cb(response !== undefined ? response : {});
+                }
             });
         }
     };
