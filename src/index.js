@@ -50,7 +50,7 @@
         if (method === undefined) {
             method = "POST";
         }
-        if (ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
+        if (ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic) || cb !== undefined) {
             ReactPubSubStore._dao.setResource(topic, data, function (response) {
                 ReactPubSubStore._topicsData[topic] = response;
                 ReactPubSubStore._topics[topic].forEach(function (item) {
