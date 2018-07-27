@@ -46,13 +46,16 @@
         };
     };
 
-    ReactPubSubStore.publish = function (topic, data) {
+    ReactPubSubStore.publish = function (topic, data, method) {
+        if (method === undefined) {
+            method = "POST";
+        }
         if (ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
             ReactPubSubStore._dao.setResource(topic, data, function (response) {
                 ReactPubSubStore._topicsData[topic] = response;
                 ReactPubSubStore._topics[topic].forEach(function (item) {
                     item(response !== undefined ? response : {});
-                });
+                }, method);
             });
         }
     };

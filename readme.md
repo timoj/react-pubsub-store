@@ -36,7 +36,7 @@ var Fetcher = (function () {
 export default Fetcher;
 ....
 
-ReactPubSubStore.setFetcher(Fetcher);
+ReactPubSubStore.setDAO(Fetcher);
 ```
 
 You can now start a new subscription:
