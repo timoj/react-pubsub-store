@@ -1,14 +1,20 @@
 (function (global) {
     "use strict";
-    var ReactPubSubStore = {};
+    let ReactPubSubStore = {};
     ReactPubSubStore._dao = null;
+    ReactPubSubStore._URLBuilder = null;
     ReactPubSubStore._topics = {};
+    ReactPubSubStore._topicsOptions = {};
     ReactPubSubStore._topicsData = {};
     ReactPubSubStore._hOP = ReactPubSubStore._topics.hasOwnProperty;
 
 
     ReactPubSubStore._updateTopicData = function (topic, append) {
-        ReactPubSubStore._dao.fetchResource(topic, (response) => {
+        let url = topic;
+        if (ReactPubSubStore._URLBuilder !== undefined) {
+            url = ReactPubSubStore._URLBuilder(topic, ReactPubSubStore._topicsOptions[topic]);
+        }
+        ReactPubSubStore._dao.fetchResource(url, (response) => {
             if (append) {
                 ReactPubSubStore._topicsData[topic] = ReactPubSubStore._topicsData[topic].concat(response);
             } else {
@@ -17,6 +23,9 @@
             ReactPubSubStore._topics[topic].forEach(function (item) {
                 item(response !== undefined ? response : {});
             });
+            if (ReactPubSubStore._topicsOptions[topic].pagination) {
+                ReactPubSubStore._topicsOptions[topic].page += 1;
+            }
         });
     };
 
@@ -24,8 +33,25 @@
         ReactPubSubStore._dao = dao;
     };
 
+    ReactPubSubStore.setURLBuilder = function (func) {
+        ReactPubSubStore._URLBuilder = func;
+    };
+
+    ReactPubSubStore.createStore = function (topic, pagination) {
+        if (pagination === undefined) {
+            pagination = false;
+        }
+
+        if (!ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
+            ReactPubSubStore._topicsOptions[topic].pagination = pagination;
+            if (pagination)
+                ReactPubSubStore._topicsOptions[topic].page = 1;
+            ReactPubSubStore._topics[topic] = [];
+        }
+    };
+
     ReactPubSubStore.subscribe = function (topic, listener) {
-        var justCreated = false;
+        let justCreated = false;
 
         // Create the topic's object if not yet created
         if (!ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
