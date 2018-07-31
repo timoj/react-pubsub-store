@@ -11,7 +11,7 @@
 
     ReactPubSubStore._updateTopicData = function (topic, append) {
         let url = topic;
-        if (ReactPubSubStore._URLBuilder !== undefined) {
+        if (typeof ReactPubSubStore._URLBuilder === "function") {
             url = ReactPubSubStore._URLBuilder(topic, ReactPubSubStore._topicsOptions[topic]);
         }
         ReactPubSubStore._dao.fetchResource(url, (response) => {
