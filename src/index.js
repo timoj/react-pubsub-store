@@ -41,7 +41,7 @@
         if (pagination === undefined) {
             pagination = false;
         }
-
+        ReactPubSubStore._topicsOptions[topic] = {};
         if (!ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
             ReactPubSubStore._topicsOptions[topic].pagination = pagination;
             if (pagination)
