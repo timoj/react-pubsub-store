@@ -7,9 +7,13 @@
     ReactPubSubStore._hOP = ReactPubSubStore._topics.hasOwnProperty;
 
 
-    ReactPubSubStore._updateTopicData = function (topic) {
+    ReactPubSubStore._updateTopicData = function (topic, append) {
         ReactPubSubStore._dao.fetchResource(topic, (response) => {
-            ReactPubSubStore._topicsData[topic] = response;
+            if (append) {
+                ReactPubSubStore._topicsData[topic] = ReactPubSubStore._topicsData[topic].concat(response);
+            } else {
+                ReactPubSubStore._topicsData[topic] = response;
+            }
             ReactPubSubStore._topics[topic].forEach(function (item) {
                 item(response !== undefined ? response : {});
             });
@@ -44,6 +48,20 @@
                 delete ReactPubSubStore._topics[topic][index];
             }
         };
+    };
+
+    ReactPubSubStore.update = function (topic, append, cb) {
+        if (append === undefined) {
+            append = false;
+        }
+        if (!ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
+            if (cb !== undefined)
+                cb(false);
+            return;
+        }
+        ReactPubSubStore._updateTopicData(topic, append);
+        if (cb !== undefined)
+            cb(true);
     };
 
     ReactPubSubStore.publish = function (topic, data, method, cb) {
