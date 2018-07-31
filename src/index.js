@@ -23,7 +23,7 @@
             ReactPubSubStore._topics[topic].forEach(function (item) {
                 item(response !== undefined ? response : {});
             });
-            if (ReactPubSubStore._topicsOptions[topic].pagination) {
+            if (ReactPubSubStore._topicsOptions[topic] !== undefined && ReactPubSubStore._topicsOptions[topic].pagination) {
                 ReactPubSubStore._topicsOptions[topic].page += 1;
             }
         });
