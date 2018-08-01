@@ -10,7 +10,7 @@
 
     ReactPubSubStore._updateTopicData = function (topic, append) {
         let url = topic;
-        if (ReactPubSubStore._topicsOptions[topic].urlBuilder !== undefined && typeof ReactPubSubStore._topicsOptions[topic].urlBuilder === "function") {
+        if ((ReactPubSubStore._topicsOptions[topic] !== undefined && ReactPubSubStore._topicsOptions[topic].urlBuilder !== undefined && typeof ReactPubSubStore._topicsOptions[topic].urlBuilder === "function") {
             url = ReactPubSubStore._topicsOptions[topic].urlBuilder(ReactPubSubStore._topicsOptions[topic]);
         }
         ReactPubSubStore._dao.fetchResource(url, (response) => {
@@ -32,10 +32,6 @@
 
     ReactPubSubStore.setDAO = function (dao) {
         ReactPubSubStore._dao = dao;
-    };
-
-    ReactPubSubStore.setURLBuilder = function (func) {
-        ReactPubSubStore._URLBuilder = func;
     };
 
     ReactPubSubStore.createStore = function (topic, pagination, urlBuilder) {
