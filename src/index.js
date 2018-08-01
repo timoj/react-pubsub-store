@@ -16,7 +16,8 @@
         }
         ReactPubSubStore._dao.fetchResource(url, (response) => {
             if (append) {
-                ReactPubSubStore._topicsData[topic] = ReactPubSubStore._topicsData[topic].concat(response);
+                if (response !== undefined && response.constructor === Array)
+                    ReactPubSubStore._topicsData[topic] = ReactPubSubStore._topicsData[topic].concat(response);
             } else {
                 ReactPubSubStore._topicsData[topic] = response;
             }
@@ -24,7 +25,8 @@
                 item(response !== undefined ? response : {});
             });
             if (ReactPubSubStore._topicsOptions[topic] !== undefined && ReactPubSubStore._topicsOptions[topic].pagination) {
-                ReactPubSubStore._topicsOptions[topic].page += 1;
+                if (response !== undefined && response.constructor === Array && response.length > 0)
+                    ReactPubSubStore._topicsOptions[topic].page += 1;
             }
         });
     };
