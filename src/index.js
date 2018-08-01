@@ -11,7 +11,7 @@
     ReactPubSubStore._updateTopicData = function (topic, append) {
         let url = topic;
         if (ReactPubSubStore._topicsOptions[topic] !== undefined && ReactPubSubStore._topicsOptions[topic].urlBuilder !== undefined && typeof ReactPubSubStore._topicsOptions[topic].urlBuilder === "function") {
-            url = ReactPubSubStore._topicsOptions[topic].urlBuilder(ReactPubSubStore._topicsOptions[topic]);
+            url = ReactPubSubStore._topicsOptions[topic].urlBuilder(topic, ReactPubSubStore._topicsOptions[topic]);
         }
         ReactPubSubStore._dao.fetchResource(url, (response) => {
             if (append) {
@@ -23,10 +23,6 @@
             ReactPubSubStore._topics[topic].forEach(function (item) {
                 item(response !== undefined ? response : {});
             });
-            if (ReactPubSubStore._topicsOptions[topic] !== undefined && ReactPubSubStore._topicsOptions[topic].pagination) {
-                if (response !== undefined && response.constructor === Array && response.length > 0)
-                    ReactPubSubStore._topicsOptions[topic].page += 1;
-            }
         });
     };
 
@@ -34,15 +30,9 @@
         ReactPubSubStore._dao = dao;
     };
 
-    ReactPubSubStore.createStore = function (topic, pagination, urlBuilder) {
-        if (pagination === undefined) {
-            pagination = false;
-        }
+    ReactPubSubStore.createStore = function (topic, urlBuilder) {
         ReactPubSubStore._topicsOptions[topic] = {};
         if (!ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
-            ReactPubSubStore._topicsOptions[topic].pagination = pagination;
-            if (pagination)
-                ReactPubSubStore._topicsOptions[topic].page = 1;
             if (urlBuilder !== undefined)
                 ReactPubSubStore._topicsOptions[topic].urlBuilder = urlBuilder;
             ReactPubSubStore._topics[topic] = [];
