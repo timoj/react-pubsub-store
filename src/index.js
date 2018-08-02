@@ -21,7 +21,7 @@
                 ReactPubSubStore._topicsData[topic] = response;
             }
             ReactPubSubStore._topics[topic].forEach(function (item) {
-                item(response !== undefined ? response : {});
+                item(ReactPubSubStore._topicsData[topic] !== undefined ? ReactPubSubStore._topicsData[topic] : {});
             });
         });
     };
