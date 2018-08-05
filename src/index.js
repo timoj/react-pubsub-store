@@ -40,8 +40,12 @@
         }
     };
 
-    ReactPubSubStore.subscribe = function (topic, listener) {
+    ReactPubSubStore.subscribe = function (topic, listener, update) {
         let justCreated = false;
+
+        if (update === undefined) {
+            update = false;
+        }
 
         // Create the topic's object if not yet created
         if (!ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
@@ -50,9 +54,9 @@
         }
 
         // Add the listener to queue
-        var index = ReactPubSubStore._topics[topic].push(listener) - 1;
+        let index = ReactPubSubStore._topics[topic].push(listener) - 1;
 
-        if (justCreated) {
+        if (justCreated || update) {
             ReactPubSubStore._updateTopicData(topic);
         } else {
             listener(ReactPubSubStore._topicsData[topic]);
@@ -86,10 +90,12 @@
         }
         if (ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic) || cb !== undefined) {
             ReactPubSubStore._dao.setResource(topic, data, function (response) {
-                ReactPubSubStore._topicsData[topic] = response;
-                ReactPubSubStore._topics[topic].forEach(function (item) {
-                    item(response !== undefined ? response : {});
-                });
+                if (ReactPubSubStore._hOP.call(ReactPubSubStore._topics, topic)) {
+                    ReactPubSubStore._topicsData[topic] = response;
+                    ReactPubSubStore._topics[topic].forEach(function (item) {
+                        item(response !== undefined ? response : {});
+                    });
+                }
                 if (cb !== undefined) {
                     cb(response !== undefined ? response : {});
                 }
