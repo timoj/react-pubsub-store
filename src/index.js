@@ -40,6 +40,12 @@
         }
     };
 
+    ReactPubSubStore.deleteStore = function (topic) {
+        if (ReactPubSubStore._topics[topic] !== undefined) {
+            delete ReactPubSubStore._topics[topic];
+        }
+    };
+
     ReactPubSubStore.subscribe = function (topic, listener, update) {
         let justCreated = false;
 
