@@ -1,6 +1,6 @@
 {
   "name": "react-pubsub-store",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Pubsub stores for react apps",
   "homepage": "https://github.com/timoj",
   "keywords": [
