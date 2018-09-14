@@ -2,14 +2,13 @@ import ReactPubSubStore from 'ReactPubSubStore';
 
 class RPSStore {
 
-    data = null;
-    path = "";
-    doUpdate = false;
-    stateKey = "";
-    clientListener = () => {};
-    subscription = null;
-
     constructor() {
+        this.data = null;
+        this.path = "";
+        this.doUpdate = false;
+        this.stateKey = "";
+        this.clientListener = () => {};
+        this.subscription = null;
         this._subscribe();
     }
 

@@ -2,8 +2,12 @@ import React from 'react';
 import RPSStore from './RPSStore';
 
 class RPSComponent extends React.Component {
-    stores = [];
-    _instanciatedStores = [];
+
+    constructor(props) {
+        super(props);
+        this.stores = [];
+        this._instanciatedStores = [];
+    }
 
     componentWillMount() {
         for (let store in this.stores) {
