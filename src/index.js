@@ -1,4 +1,4 @@
-import ReactPubSubStore from 'ReactPubSubStore';
+import ReactPubSubStore from './ReactPubSubStore';
 import RPSStore from './RPSStore';
 import RPSComponent from './RPSComponent';
 
