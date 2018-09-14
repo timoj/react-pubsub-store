@@ -1,3 +1,5 @@
+import React from 'react';
+
 (function (global) {
     "use strict";
     let ReactPubSubStore = {};
@@ -71,7 +73,8 @@
         // Provide handle back for removal of topic
         return {
             remove: function () {
-                delete ReactPubSubStore._topics[topic][index];
+                if (ReactPubSubStore._topics[topic] !== undefined)
+                    delete ReactPubSubStore._topics[topic][index];
             }
         };
     };
@@ -108,6 +111,67 @@
             }, method);
         }
     };
+
+    class RPSStore {
+
+        data = null;
+        path = "";
+        doUpdate = false;
+        stateKey = "";
+        clientListener = () => {};
+        subscribtion = null;
+
+        constructor() {
+            this._subscribe();
+        }
+
+        setClientListener(listener) {
+            this.clientListener = listener;
+        }
+
+        _subscribe() {
+            this.subscribtion = ReactPubSubStore.subscribe(this.path, (response) => {
+                this.data = response;
+                this._updateClients();
+            }, this.doUpdate);
+        }
+
+        _updateClients() {
+            this.clientListener(this.stateKey, this.data);
+        }
+
+        remove() {
+            if (this.subscribtion !== null) {
+                this.subscribtion.remove();
+            }
+        }
+
+    }
+
+    class RPSComponent extends React.Component {
+        stores = [];
+        _instanciatedStores = [];
+
+        componentWillMount() {
+            for (let store in this.stores) {
+                if (this.stores[store] instanceof RPSStore) {
+                    let storeInstance = this.stores[store]();
+                    storeInstance.setClientListener((stateKey, data) => {
+                        let state = {};
+                        state[stateKey] = data;
+                        this.setState(state);
+                    });
+                    this._instanciatedStores.push(storeInstance);
+                }
+            }
+        }
+
+        componentWillUnmount() {
+            for (let storeInstance in this._instanciatedStores) {
+                this._instanciatedStores[storeInstance].remove();
+            }
+        }
+    }
 
     if (typeof module === 'object' && module && typeof module.exports === 'object') {
         module.exports = ReactPubSubStore;
