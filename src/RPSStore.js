@@ -9,6 +9,7 @@ class RPSStore {
         this.stateKey = stateKey;
         this.clientListener = () => {};
         this.subscription = null;
+        this._subscribe();
     }
 
     setClientListener(listener) {
