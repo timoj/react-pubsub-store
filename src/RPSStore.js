@@ -1,4 +1,4 @@
-import ReactPubSubStore from 'ReactPubSubStore';
+import ReactPubSubStore from './ReactPubSubStore';
 
 class RPSStore {
 
