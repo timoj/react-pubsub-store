@@ -34,8 +34,8 @@ class RPSComponent extends React.Component {
                 storeInstance.setClientListener((stateKey, data) => {
                     let state = {};
                     state[stateKey] = data;
-                    this.setState(state);
                     this.storeInitializedCount++;
+                    this.setState(state);
                 });
                 this._instanciatedStores.push(storeInstance);
             }
