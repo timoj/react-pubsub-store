@@ -5,22 +5,32 @@ class RPSComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        this.stores = [];
+        this._stores = [];
         this._instanciatedStores = [];
+        this.storeCount = 0;
+        this.storeInitializedCount = 0;
     }
 
     setStores(stores) {
-        this.stores = stores;
+        this._stores = stores;
+    }
+    
+    setInitialLoadingContent(content) {
+        this._initialLoadingContent = content;
+        this._showInitialLoadingContent = true;
     }
 
     componentWillMount() {
-        for (let i in this.stores) {
-            let storeInstance = new this.stores[i]();
+        this.storeCount = this._stores.length;
+        this.storeInitializedCount = 0;
+        for (let i in this._stores) {
+            let storeInstance = new this._stores[i]();
             if (storeInstance instanceof RPSStore) {
                 storeInstance.setClientListener((stateKey, data) => {
                     let state = {};
                     state[stateKey] = data;
                     this.setState(state);
+                    this.storeInitializedCount++;
                 });
                 this._instanciatedStores.push(storeInstance);
             }
