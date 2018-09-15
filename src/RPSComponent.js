@@ -14,9 +14,9 @@ class RPSComponent extends React.Component {
     }
 
     componentWillMount() {
-        for (let store in this.stores) {
-            if (this.stores[store] instanceof RPSStore) {
-                let storeInstance = this.stores[store]();
+        for (let i in this.stores) {
+            let storeInstance = new this.stores[i]();
+            if (storeInstance instanceof RPSStore) {
                 storeInstance.setClientListener((stateKey, data) => {
                     let state = {};
                     state[stateKey] = data;
