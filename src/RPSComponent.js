@@ -14,6 +14,8 @@ class RPSComponent extends React.Component {
     setStores(stores) {
         this._stores = stores;
     }
+
+    set
     
     setInitialLoadingContent(content) {
         this._initialLoadingContent = content;
@@ -24,7 +26,12 @@ class RPSComponent extends React.Component {
         this.storeCount = this._stores.length;
         this.storeInitializedCount = 0;
         for (let i in this._stores) {
-            let storeInstance = new this._stores[i]();
+            let storeInstance;
+            if (Array.isArray(this._stores[i])) { // parameter of path
+                storeInstance = new this._stores[i][0](this._stores[i][1]);
+            } else {
+                storeInstance = new this._stores[i]();
+            }
             if (storeInstance instanceof RPSStore) {
                 storeInstance.setClientListener((stateKey, data) => {
                     let state = {};
