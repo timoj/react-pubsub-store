@@ -14,6 +14,8 @@ class RPSStore {
 
     setClientListener(listener) {
         this.clientListener = listener;
+        if (this.data !== null)
+            listener(this.stateKey, this.data);
     }
 
     _subscribe() {
