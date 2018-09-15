@@ -9,6 +9,10 @@ class RPSComponent extends React.Component {
         this._instanciatedStores = [];
     }
 
+    setStores(stores) {
+        this.stores = stores;
+    }
+
     componentWillMount() {
         for (let store in this.stores) {
             if (this.stores[store] instanceof RPSStore) {
