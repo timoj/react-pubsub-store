@@ -14,8 +14,6 @@ class RPSComponent extends React.Component {
     setStores(stores) {
         this._stores = stores;
     }
-
-    set
     
     setInitialLoadingContent(content) {
         this._initialLoadingContent = content;
